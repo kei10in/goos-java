@@ -53,6 +53,16 @@ public class FakeAuctionServer {
     public void hasRecievedJoinRequestFromSniper() throws InterruptedException {
         messageListener.recievesAMessage();
     }
+    
+    public void reportPrice(int i, int j, String string) {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    public void hasRecievedBid(int i, String sniperXmppId) {
+        // TODO Auto-generated method stub
+        
+    }
 
     public void announceClosed() throws XMPPException {
         currentChat.sendMessage(new Message());
