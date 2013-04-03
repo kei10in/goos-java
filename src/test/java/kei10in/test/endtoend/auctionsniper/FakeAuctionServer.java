@@ -1,4 +1,4 @@
-package kei10in.auctionsniper.test.endtoend;
+package kei10in.test.endtoend.auctionsniper;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.Matchers.*;

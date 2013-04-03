@@ -1,4 +1,4 @@
-package kei10in.auctionsniper.test.endtoend;
+package kei10in.test.endtoend.auctionsniper;
 
 import static kei10in.auctionsniper.ui.MainWindow.STATUS_JOINING;
 import static kei10in.auctionsniper.ui.MainWindow.STATUS_LOST;

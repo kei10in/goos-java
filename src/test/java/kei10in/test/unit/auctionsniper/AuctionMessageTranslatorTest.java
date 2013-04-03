@@ -1,4 +1,4 @@
-package kei10in.auctionsniper.test.unit;
+package kei10in.test.unit.auctionsniper;
 
 import kei10in.auctionsniper.AuctionEventListener;
 import kei10in.auctionsniper.AuctionMessageTranslator;

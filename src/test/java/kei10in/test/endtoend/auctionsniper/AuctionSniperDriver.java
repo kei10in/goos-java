@@ -1,8 +1,7 @@
-package kei10in.auctionsniper.test.endtoend;
-
-import kei10in.auctionsniper.ui.MainWindow;
+package kei10in.test.endtoend.auctionsniper;
 
 import static org.hamcrest.Matchers.*;
+import kei10in.auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;

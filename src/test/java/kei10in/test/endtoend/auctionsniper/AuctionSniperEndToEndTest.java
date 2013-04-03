@@ -1,4 +1,4 @@
-package kei10in.auctionsniper.test.endtoend;
+package kei10in.test.endtoend.auctionsniper;
 
 import org.junit.After;
 import org.junit.Test;
