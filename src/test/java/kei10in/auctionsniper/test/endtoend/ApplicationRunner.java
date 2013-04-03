@@ -1,7 +1,9 @@
 package kei10in.auctionsniper.test.endtoend;
 
+import static kei10in.auctionsniper.ui.MainWindow.STATUS_JOINING;
+import static kei10in.auctionsniper.ui.MainWindow.STATUS_LOST;
 import kei10in.auctionsniper.Main;
-import static kei10in.auctionsniper.ui.MainWindow.*;
+import kei10in.auctionsniper.ui.MainWindow;
 
 public class ApplicationRunner {
     public static final String SNIPER_ID = "sniper";
@@ -32,8 +34,7 @@ public class ApplicationRunner {
     }
     
     public void hasShownSniperIsBidding() {
-        // TODO Auto-generated method stub
-        
+        driver.showsSniperStatus(MainWindow.STATUS_BIDDING);        
     }
 
     public void showsSniperHasLostAution() {
