@@ -19,6 +19,7 @@ dependencies {
         
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile group: 'org.jmock', name: 'jmock', version: '2.6.0'
+    testCompile group: 'org.jmock', name: 'jmock-junit4', version: '2.6.0'
     testCompile group: 'com.googlecode.windowlicker', name: 'windowlicker-swing', version: 'r268'
 }
 
