@@ -8,12 +8,10 @@ import javax.swing.SwingUtilities;
 import kei10in.auctionsniper.ui.MainWindow;
 
 import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Message;
 
-public class Main implements AuctionEventListener {
+public class Main implements SniperListener {
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
     private static final int ARG_PASSWORD = 2;
@@ -80,7 +78,7 @@ public class Main implements AuctionEventListener {
         disconnectWhenUICloses(connection);
         final Chat chat = connection.getChatManager().createChat(
             auctionId(itemId, connection),
-            new AuctionMessageTranslator(this));
+            new AuctionMessageTranslator(new AuctionSniper(this)));
         this.notToBeGCd = chat;
         chat.sendMessage(JOIN_COMMAND_FORMAT);
     }
@@ -94,7 +92,7 @@ public class Main implements AuctionEventListener {
         });
     }
 
-    public void auctionClosed() {
+    public void sniperLost() {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 ui.showStatus(MainWindow.STATUS_LOST);
