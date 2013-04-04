@@ -25,6 +25,14 @@ dependencies {
 
 test {
     systemProperties 'property': 'value'
+    include 'kei10in/test/unit/**'
+    testLogging {
+        exceptionFormat "full"
+    }
+}
+
+task endtoend(type: Test) {
+    include 'kei10in/test/endtoend/**'
 }
 
 uploadArchives {

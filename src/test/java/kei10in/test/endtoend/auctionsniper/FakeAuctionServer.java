@@ -1,15 +1,21 @@
 package kei10in.test.endtoend.auctionsniper;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
-import kei10in.auctionsniper.Main;
+import kei10in.auctionsniper.XMPPAuction;
 
 import org.hamcrest.Matcher;
-import org.jivesoftware.smack.*;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManagerListener;
+import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
 public class FakeAuctionServer {
@@ -52,7 +58,7 @@ public class FakeAuctionServer {
     public void hasRecievedJoinRequestFromSniper(String sniperId)
         throws InterruptedException {
         recievesAMessageMatching(
-            sniperId, equalTo(Main.JOIN_COMMAND_FORMAT));
+            sniperId, equalTo(XMPPAuction.JOIN_COMMAND_FORMAT));
     }
 
     public void reportPrice(int price, int increment, String bidder)

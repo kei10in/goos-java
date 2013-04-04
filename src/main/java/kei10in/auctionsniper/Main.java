@@ -22,11 +22,6 @@ public class Main implements SniperListener {
     public static final String AUCTION_ID_FORMAT =
         ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
-    public static final String JOIN_COMMAND_FORMAT =
-        "SOLVersion: 1.1; Command: JOIN;";
-    public static final String BID_COMMAND_FORMAT =
-        "SOLVersion: 1.1; Command: BID; Price: %d;";
-
     /**
      * @param args
      */
@@ -81,18 +76,10 @@ public class Main implements SniperListener {
             auctionId(itemId, connection), null);
         this.notToBeGCd = chat;
 
-        Auction auction = new Auction() {
-            public void bid(int amount) {
-                try {
-                    chat.sendMessage(String.format(BID_COMMAND_FORMAT, amount));
-                } catch (XMPPException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
+        Auction auction = new XMPPAuction(chat);
         chat.addMessageListener(
             new AuctionMessageTranslator(new AuctionSniper(auction, this)));
-        chat.sendMessage(JOIN_COMMAND_FORMAT);
+        auction.join();
     }
 
     private void disconnectWhenUICloses(final XMPPConnection connection) {
