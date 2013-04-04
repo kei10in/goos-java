@@ -59,7 +59,7 @@ public class FakeAuctionServer {
         throws XMPPException {
         currentChat.sendMessage(
             String.format("SOLVersion: 1.1; Event: PRICE; CurrentPrice: %d; "
-                + "Increment: %d; Bidder %s;", price, increment, bidder));
+                + "Increment: %d; Bidder: %s;", price, increment, bidder));
     }
 
     public void hasRecievedBid(int bid, String sniperId)
