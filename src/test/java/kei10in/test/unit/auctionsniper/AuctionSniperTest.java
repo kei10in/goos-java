@@ -1,4 +1,5 @@
 package kei10in.test.unit.auctionsniper;
+import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionSniper;
 import kei10in.auctionsniper.SniperListener;
 
@@ -11,9 +12,12 @@ import org.junit.Test;
 public class AuctionSniperTest {
     @Rule
     public final JUnitRuleMockery context = new JUnitRuleMockery();
+    
+    private final Auction auction = context.mock(Auction.class);
     private final SniperListener sniperListener =
         context.mock(SniperListener.class);
-    private final AuctionSniper sut = new AuctionSniper(sniperListener);
+    private final AuctionSniper cut =
+        new AuctionSniper(auction, sniperListener);
    
     @Test
     public void reportsLostWhenAuctionCloses() {
@@ -21,7 +25,19 @@ public class AuctionSniperTest {
             oneOf(sniperListener).sniperLost();
         }});
         
-        sut.auctionClosed();
+        cut.auctionClosed();
+    }
+    
+    @Test
+    public void bidsHigherAndReportsBiddingWhenNewPriceArrives() {
+        final int price = 1001;
+        final int increment = 25;
+        context.checking(new Expectations() {{
+            oneOf(auction).bid(price + increment);
+            atLeast(1).of(sniperListener).sniperBidding();
+        }});
+        
+        cut.currentPrice(price, increment);
     }
 
 }

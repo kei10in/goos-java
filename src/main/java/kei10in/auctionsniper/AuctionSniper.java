@@ -1,19 +1,21 @@
 package kei10in.auctionsniper;
 
 public class AuctionSniper implements AuctionEventListener {
-    private final SniperListener listener;
+    private final Auction auction; 
+    private final SniperListener sniperListener;
 
-    public AuctionSniper(SniperListener listener) {
-        this.listener = listener;
+    public AuctionSniper(Auction auction, SniperListener listener) {
+        this.auction = auction;
+        this.sniperListener = listener;
     }
     
     public void auctionClosed() {
-        listener.sniperLost();
+        sniperListener.sniperLost();
     }
 
     public void currentPrice(int price, int increment) {
-        // TODO Auto-generated method stub
-
+        auction.bid(price + increment);
+        sniperListener.sniperBidding();
     }
 
 }
