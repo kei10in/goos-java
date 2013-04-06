@@ -2,7 +2,9 @@ package kei10in.test.endtoend.auctionsniper;
 
 import org.junit.After;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+@Category(Runtime.class)
 public class AuctionSniperEndToEndTest {
     private final FakeAuctionServer auction =
         new FakeAuctionServer("item-54321");
