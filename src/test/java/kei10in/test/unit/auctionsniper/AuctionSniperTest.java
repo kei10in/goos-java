@@ -1,10 +1,11 @@
 package kei10in.test.unit.auctionsniper;
 import kei10in.auctionsniper.Auction;
+import kei10in.auctionsniper.AuctionEventListener.PriceSource;
 import kei10in.auctionsniper.AuctionSniper;
 import kei10in.auctionsniper.SniperListener;
-import kei10in.auctionsniper.AuctionEventListener.PriceSource;
 
 import org.jmock.Expectations;
+import org.jmock.States;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,6 +15,7 @@ public class AuctionSniperTest {
     @Rule
     public final JUnitRuleMockery context = new JUnitRuleMockery();
     
+    private final States sniperState = context.states("sniper");
     private final Auction auction = context.mock(Auction.class);
     private final SniperListener sniperListener =
         context.mock(SniperListener.class);
@@ -21,7 +23,7 @@ public class AuctionSniperTest {
         new AuctionSniper(auction, sniperListener);
    
     @Test
-    public void reportsLostWhenAuctionCloses() {
+    public void reportsLostWhenAuctionClosesImmediately() {
         context.checking(new Expectations() {{
             oneOf(sniperListener).sniperLost();
         }});
@@ -48,6 +50,34 @@ public class AuctionSniperTest {
         }});
         
         cut.currentPrice(123, 45, PriceSource.FromSniper);
+    }
+    
+    @Test
+    public void reportsLostIfAuctionClosesWhenBidding() {
+        context.checking(new Expectations() {{
+            ignoring(auction);
+            allowing(sniperListener).sniperBidding();
+                then(sniperState.is("bidding"));
+            atLeast(1).of(sniperListener).sniperLost();
+                when(sniperState.is("bidding"));
+        }});
+        
+        cut.currentPrice(123, 45, PriceSource.FromOtherBidder);
+        cut.auctionClosed();
+    }
+    
+    @Test
+    public void reportsWonIfAuctionClosesWhenWinning() {
+        context.checking(new Expectations() {{
+            ignoring(auction);
+            allowing(sniperListener).sniperWinning();
+                then(sniperState.is("winning"));
+            atLeast(1).of(sniperListener).sniperWon();
+                when(sniperState.is("winning"));
+        }});
+        
+        cut.currentPrice(123, 45, PriceSource.FromSniper);
+        cut.auctionClosed();
     }
 
 }
