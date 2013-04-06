@@ -2,6 +2,7 @@ package kei10in.test.unit.auctionsniper;
 import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionSniper;
 import kei10in.auctionsniper.SniperListener;
+import kei10in.auctionsniper.AuctionEventListener.PriceSource;
 
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -37,7 +38,7 @@ public class AuctionSniperTest {
             atLeast(1).of(sniperListener).sniperBidding();
         }});
         
-        cut.currentPrice(price, increment);
+        cut.currentPrice(price, increment, PriceSource.FromOtherBidder);
     }
 
 }
