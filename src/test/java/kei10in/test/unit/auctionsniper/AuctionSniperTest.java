@@ -40,5 +40,14 @@ public class AuctionSniperTest {
         
         cut.currentPrice(price, increment, PriceSource.FromOtherBidder);
     }
+    
+    @Test
+    public void reportsWinningWhenCurrentPriceComesFromSniper() {
+        context.checking(new Expectations() {{
+            atLeast(1).of(sniperListener).sniperWinning();
+        }});
+        
+        cut.currentPrice(123, 45, PriceSource.FromSniper);
+    }
 
 }

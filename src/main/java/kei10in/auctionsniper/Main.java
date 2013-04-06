@@ -95,6 +95,10 @@ public class Main {
     
     
     public class SniperStateDisplayer implements SniperListener {
+        
+        public void sniperWinning() {
+            showStatus(MainWindow.STATUS_WINNING);
+        }
 
         public void sniperBidding() {
             showStatus(MainWindow.STATUS_BIDDING);
