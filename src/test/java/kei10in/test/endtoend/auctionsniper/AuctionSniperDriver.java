@@ -1,11 +1,12 @@
 package kei10in.test.endtoend.auctionsniper;
 
-import static org.hamcrest.Matchers.*;
+import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
+import static org.hamcrest.Matchers.equalTo;
 import kei10in.auctionsniper.ui.MainWindow;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
-import com.objogate.wl.swing.driver.JLabelDriver;
+import com.objogate.wl.swing.driver.JTableDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
 
 public class AuctionSniperDriver extends JFrameDriver {
@@ -20,7 +21,6 @@ public class AuctionSniperDriver extends JFrameDriver {
     
     @SuppressWarnings("unchecked")
     public void showsSniperStatus(String statusText) {
-        new JLabelDriver(this, named(MainWindow.SNIPER_STATUS_NAME))
-            .hasText(equalTo(statusText));
+        new JTableDriver(this).hasCell(withLabelText(equalTo(statusText)));
     }
 }
