@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import kei10in.auctionsniper.SniperState;
+
 public class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
     public static final String MAIN_WINDOW_NAME = "main window";
@@ -45,6 +47,10 @@ public class MainWindow extends JFrame {
         return snipersTable;
     }
     
+    public void sniperStatusChanged(
+        SniperState sniperState, String statusText) {
+        snipers.sniperStatusChanged(sniperState, statusText);
+    }
    
     public void showStatus(String statusText) {
         snipers.setStatusText(statusText);
