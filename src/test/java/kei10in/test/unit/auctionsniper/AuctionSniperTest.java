@@ -3,7 +3,7 @@ import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionEventListener.PriceSource;
 import kei10in.auctionsniper.AuctionSniper;
 import kei10in.auctionsniper.SniperListener;
-import kei10in.auctionsniper.SniperState;
+import kei10in.auctionsniper.SniperSnapshot;
 
 import org.jmock.Expectations;
 import org.jmock.States;
@@ -43,7 +43,7 @@ public class AuctionSniperTest {
         context.checking(new Expectations() {{
             oneOf(auction).bid(price + increment);
             atLeast(1).of(sniperListener).sniperBidding(
-                new SniperState(ITEM_ID, price, bid));
+                new SniperSnapshot(ITEM_ID, price, bid));
         }});
         
         cut.currentPrice(price, increment, PriceSource.FromOtherBidder);
@@ -63,7 +63,7 @@ public class AuctionSniperTest {
         context.checking(new Expectations() {{
             ignoring(auction);
             allowing(sniperListener).sniperBidding(
-                with(any(SniperState.class)));
+                with(any(SniperSnapshot.class)));
                 then(sniperState.is("bidding"));
             atLeast(1).of(sniperListener).sniperLost();
                 when(sniperState.is("bidding"));

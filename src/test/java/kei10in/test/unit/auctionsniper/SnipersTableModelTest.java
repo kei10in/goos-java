@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-import kei10in.auctionsniper.SniperState;
+import kei10in.auctionsniper.SniperSnapshot;
 import kei10in.auctionsniper.ui.Column;
 import kei10in.auctionsniper.ui.MainWindow;
 import kei10in.auctionsniper.ui.SnipersTableModel;
@@ -43,12 +43,12 @@ public class SnipersTableModelTest {
         }});
         
         cut.sniperStatusChanged(
-            new SniperState("item id", 555, 666), MainWindow.STATUS_BIDDING);
+            new SniperSnapshot("item id", 555, 666), MainWindow.STATUS_BIDDING);
         
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");
         assertColumnEquals(Column.LAST_PRICE, 555);
         assertColumnEquals(Column.LAST_BID, 666);
-        assertColumnEquals(Column.SNIPER_STATUS, MainWindow.STATUS_BIDDING);
+        assertColumnEquals(Column.SNIPER_STATE, MainWindow.STATUS_BIDDING);
     }
     
     private void assertColumnEquals(Column column, Object expected) {

@@ -2,13 +2,13 @@ package kei10in.auctionsniper.ui;
 
 import javax.swing.table.AbstractTableModel;
 
-import kei10in.auctionsniper.SniperState;
+import kei10in.auctionsniper.SniperSnapshot;
 
 public class SnipersTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
-    private static final SniperState STARTING_UP = new SniperState("", 0, 0);
+    private static final SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0);
     
-    private SniperState sniperState = STARTING_UP;    
+    private SniperSnapshot sniperState = STARTING_UP;    
     private String statusText = MainWindow.STATUS_JOINING;
     
 
@@ -28,7 +28,7 @@ public class SnipersTableModel extends AbstractTableModel {
             return sniperState.lastPrice;
         case LAST_BID:
             return sniperState.lastBid;
-        case SNIPER_STATUS:
+        case SNIPER_STATE:
             return statusText;
         default:
             throw new IllegalArgumentException("No column at " + columnIndex);                
@@ -41,7 +41,7 @@ public class SnipersTableModel extends AbstractTableModel {
     }
     
     public void sniperStatusChanged(
-        SniperState newSniperState, String newStatusText) {
+        SniperSnapshot newSniperState, String newStatusText) {
         this.sniperState = newSniperState;
         this.statusText = newStatusText;
         fireTableRowsUpdated(0, 0);

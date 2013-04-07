@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import kei10in.auctionsniper.SniperState;
+import kei10in.auctionsniper.SniperSnapshot;
 
 public class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -48,7 +48,7 @@ public class MainWindow extends JFrame {
     }
     
     public void sniperStatusChanged(
-        SniperState sniperState, String statusText) {
+        SniperSnapshot sniperState, String statusText) {
         snipers.sniperStatusChanged(sniperState, statusText);
     }
    
