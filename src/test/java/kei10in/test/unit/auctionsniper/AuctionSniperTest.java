@@ -3,6 +3,7 @@ import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionEventListener.PriceSource;
 import kei10in.auctionsniper.AuctionSniper;
 import kei10in.auctionsniper.SniperListener;
+import kei10in.auctionsniper.SniperState;
 
 import org.jmock.Expectations;
 import org.jmock.States;
@@ -12,15 +13,17 @@ import org.junit.Test;
 
 
 public class AuctionSniperTest {
+    private static final String ITEM_ID = "item-id";
+    
     @Rule
     public final JUnitRuleMockery context = new JUnitRuleMockery();
-    
+        
     private final States sniperState = context.states("sniper");
     private final Auction auction = context.mock(Auction.class);
     private final SniperListener sniperListener =
         context.mock(SniperListener.class);
     private final AuctionSniper cut =
-        new AuctionSniper(auction, sniperListener);
+        new AuctionSniper(ITEM_ID, auction, sniperListener);
    
     @Test
     public void reportsLostWhenAuctionClosesImmediately() {
@@ -35,9 +38,12 @@ public class AuctionSniperTest {
     public void bidsHigherAndReportsBiddingWhenNewPriceArrives() {
         final int price = 1001;
         final int increment = 25;
+        final int bid = price + increment;
+        
         context.checking(new Expectations() {{
             oneOf(auction).bid(price + increment);
-            atLeast(1).of(sniperListener).sniperBidding();
+            atLeast(1).of(sniperListener).sniperBidding(
+                new SniperState(ITEM_ID, price, bid));
         }});
         
         cut.currentPrice(price, increment, PriceSource.FromOtherBidder);
@@ -56,7 +62,8 @@ public class AuctionSniperTest {
     public void reportsLostIfAuctionClosesWhenBidding() {
         context.checking(new Expectations() {{
             ignoring(auction);
-            allowing(sniperListener).sniperBidding();
+            allowing(sniperListener).sniperBidding(
+                with(any(SniperState.class)));
                 then(sniperState.is("bidding"));
             atLeast(1).of(sniperListener).sniperLost();
                 when(sniperState.is("bidding"));

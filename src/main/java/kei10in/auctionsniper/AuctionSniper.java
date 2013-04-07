@@ -1,12 +1,14 @@
 package kei10in.auctionsniper;
 
 public class AuctionSniper implements AuctionEventListener {
+    private final String itemId;
     private final Auction auction; 
     private final SniperListener sniperListener;
     
     private boolean isWinning = false; 
 
-    public AuctionSniper(Auction auction, SniperListener listener) {
+    public AuctionSniper(String itemId, Auction auction, SniperListener listener) {
+        this.itemId = itemId;
         this.auction = auction;
         this.sniperListener = listener;
     }
@@ -27,8 +29,9 @@ public class AuctionSniper implements AuctionEventListener {
             sniperListener.sniperWinning();
             break;
         case FromOtherBidder:
-            auction.bid(price + increment);
-            sniperListener.sniperBidding();
+            final int bid = price + increment;
+            auction.bid(bid);
+            sniperListener.sniperBidding(new SniperState(itemId, price, bid));
             break;
         }
     }

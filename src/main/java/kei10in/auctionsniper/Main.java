@@ -80,7 +80,8 @@ public class Main {
         chat.addMessageListener(
             new AuctionMessageTranslator(
                 connection.getUser(),
-                new AuctionSniper(auction, new SniperStateDisplayer())));
+                new AuctionSniper(
+                    itemId, auction, new SniperStateDisplayer())));
         auction.join();
     }
 
@@ -100,10 +101,10 @@ public class Main {
             showStatus(MainWindow.STATUS_WINNING);
         }
 
-        public void sniperBidding() {
+        public void sniperBidding(SniperState state) {
             showStatus(MainWindow.STATUS_BIDDING);
         }
-
+        
         public void sniperWon() {
             showStatus(MainWindow.STATUS_WON);
         }
