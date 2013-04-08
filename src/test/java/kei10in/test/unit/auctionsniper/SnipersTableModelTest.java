@@ -9,6 +9,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import kei10in.auctionsniper.SniperSnapshot;
+import kei10in.auctionsniper.SniperState;
 import kei10in.auctionsniper.ui.Column;
 import kei10in.auctionsniper.ui.MainWindow;
 import kei10in.auctionsniper.ui.SnipersTableModel;
@@ -43,7 +44,8 @@ public class SnipersTableModelTest {
         }});
         
         cut.sniperStatusChanged(
-            new SniperSnapshot("item id", 555, 666), MainWindow.STATUS_BIDDING);
+            new SniperSnapshot("item id", 555, 666, SniperState.BIDDING),
+            MainWindow.STATUS_BIDDING);
         
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");
         assertColumnEquals(Column.LAST_PRICE, 555);

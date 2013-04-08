@@ -1,10 +1,14 @@
 package kei10in.test.unit.auctionsniper;
+import static org.hamcrest.Matchers.equalTo;
 import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionEventListener.PriceSource;
 import kei10in.auctionsniper.AuctionSniper;
 import kei10in.auctionsniper.SniperListener;
 import kei10in.auctionsniper.SniperSnapshot;
+import kei10in.auctionsniper.SniperState;
 
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.States;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -42,8 +46,8 @@ public class AuctionSniperTest {
         
         context.checking(new Expectations() {{
             oneOf(auction).bid(price + increment);
-            atLeast(1).of(sniperListener).sniperBidding(
-                new SniperSnapshot(ITEM_ID, price, bid));
+            atLeast(1).of(sniperListener).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, price, bid, SniperState.BIDDING));
         }});
         
         cut.currentPrice(price, increment, PriceSource.FromOtherBidder);
@@ -62,9 +66,9 @@ public class AuctionSniperTest {
     public void reportsLostIfAuctionClosesWhenBidding() {
         context.checking(new Expectations() {{
             ignoring(auction);
-            allowing(sniperListener).sniperBidding(
-                with(any(SniperSnapshot.class)));
-                then(sniperState.is("bidding"));
+            allowing(sniperListener).sniperStateChanged(
+                with(aSniperThatIs(SniperState.BIDDING)));
+                    then(sniperState.is("bidding"));
             atLeast(1).of(sniperListener).sniperLost();
                 when(sniperState.is("bidding"));
         }});
@@ -86,5 +90,15 @@ public class AuctionSniperTest {
         cut.currentPrice(123, 45, PriceSource.FromSniper);
         cut.auctionClosed();
     }
-
+    
+    private Matcher<SniperSnapshot> aSniperThatIs(final SniperState state) {
+        return new FeatureMatcher<SniperSnapshot, SniperState>(
+            equalTo(state), "sniper that is ", "was")
+            {
+                @Override
+                protected SniperState featureValueOf(SniperSnapshot actual) {
+                    return actual.state;
+                }
+            };
+    }
 }
