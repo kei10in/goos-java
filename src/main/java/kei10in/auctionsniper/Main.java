@@ -100,38 +100,8 @@ public class Main {
         public void sniperStateChanged(final SniperSnapshot snapshot) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    ui.sniperStatusChanged(snapshot, MainWindow.STATUS_BIDDING);
+                    ui.sniperStatusChanged(snapshot);
                 } 
-             });
-             showStatus(MainWindow.STATUS_BIDDING);
-        }
-        
-        public void sniperWinning() {
-            showStatus(MainWindow.STATUS_WINNING);
-        }
-
-        public void sniperBidding(final SniperSnapshot state) {
-            SwingUtilities.invokeLater(new Runnable() {
-               public void run() {
-                   ui.sniperStatusChanged(state, MainWindow.STATUS_BIDDING);
-               } 
-            });
-            showStatus(MainWindow.STATUS_BIDDING);
-        }
-        
-        public void sniperWon() {
-            showStatus(MainWindow.STATUS_WON);
-        }
-        
-        public void sniperLost() {
-            showStatus(MainWindow.STATUS_LOST);
-        }
-
-        private void showStatus(final String status) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    ui.showStatus(status);
-                }
             });
         }
     
