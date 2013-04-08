@@ -20,7 +20,7 @@ public class AuctionSniper implements AuctionEventListener {
         } else {
             snapshot = snapshot.lost();
         }
-        sniperListener.sniperStateChanged(snapshot);
+        nofityChang();
     }
 
     public void currentPrice(
@@ -33,7 +33,10 @@ public class AuctionSniper implements AuctionEventListener {
             auction.bid(bid);
             snapshot = snapshot.bidding(price, bid);
         }
-        sniperListener.sniperStateChanged(snapshot);
+        nofityChang();
     }
 
+    private void nofityChang() {
+        sniperListener.sniperStateChanged(snapshot);
+    }
 }
