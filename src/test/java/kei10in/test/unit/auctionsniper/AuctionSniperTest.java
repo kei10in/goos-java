@@ -94,8 +94,9 @@ public class AuctionSniperTest {
             allowing(sniperListener).sniperStateChanged(
                 with(aSniperThatIs(SniperState.WINNING)));
                     then(sniperState.is("winning"));
-            atLeast(1).of(sniperListener).sniperWon();
-                when(sniperState.is("winning"));
+            atLeast(1).of(sniperListener).sniperStateChanged(
+                with(aSniperThatIs(SniperState.WON)));
+                    when(sniperState.is("winning"));
         }});
         
         cut.currentPrice(123, 45, PriceSource.FromSniper);

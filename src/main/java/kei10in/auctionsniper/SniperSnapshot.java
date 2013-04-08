@@ -44,7 +44,11 @@ public class SniperSnapshot {
     }
     
     public SniperSnapshot lost() {
-        return new SniperSnapshot(itemId, 0, 0, SniperState.LOST);
+        return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.LOST);
+    }
+    
+    public SniperSnapshot won() {
+        return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.WON);
     }
     
     public static SniperSnapshot joining(String itemId) {

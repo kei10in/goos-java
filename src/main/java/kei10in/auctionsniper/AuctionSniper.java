@@ -16,11 +16,11 @@ public class AuctionSniper implements AuctionEventListener {
 
     public void auctionClosed() {
         if (isWinning) {
-            sniperListener.sniperWon();
+            snapshot = snapshot.won();
         } else {
             snapshot = snapshot.lost();
-            sniperListener.sniperStateChanged(snapshot);
         }
+        sniperListener.sniperStateChanged(snapshot);
     }
 
     public void currentPrice(
