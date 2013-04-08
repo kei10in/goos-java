@@ -7,19 +7,19 @@ import kei10in.auctionsniper.SniperState;
 
 public class SnipersTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 1L;
+    
+    
     private static final String[] STATUS_TEXT = {
-        MainWindow.STATUS_JOINING,
-        MainWindow.STATUS_BIDDING,
-        MainWindow.STATUS_WINNING,
-        MainWindow.STATUS_LOST,
-        MainWindow.STATUS_WON,
+        "Joining",
+        "Bidding",
+        "WINNING",
+        "Lost",
+        "WON",
     };
     private static final SniperSnapshot STARTING_UP =
         new SniperSnapshot("", 0, 0, SniperState.JOINING);
         
     private SniperSnapshot sniperState = STARTING_UP;    
-    private String statusText = MainWindow.STATUS_JOINING;
-    
 
     public int getColumnCount() {
         return Column.values().length;
@@ -38,7 +38,7 @@ public class SnipersTableModel extends AbstractTableModel {
         case LAST_BID:
             return sniperState.lastBid;
         case SNIPER_STATE:
-            return statusText;
+            return textFor(sniperState.state);
         default:
             throw new IllegalArgumentException("No column at " + columnIndex);                
         }
@@ -46,9 +46,12 @@ public class SnipersTableModel extends AbstractTableModel {
     
     public void sniperStatusChanged(SniperSnapshot newSnapshot) {
         this.sniperState = newSnapshot;
-        this.statusText = STATUS_TEXT[newSnapshot.state.ordinal()];
 
         fireTableRowsUpdated(0, 0);
+    }
+    
+    public static String textFor(SniperState state) {
+        return STATUS_TEXT[state.ordinal()];
     }
 
 }
