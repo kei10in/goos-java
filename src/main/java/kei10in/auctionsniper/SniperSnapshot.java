@@ -42,13 +42,10 @@ public class SniperSnapshot {
         return new SniperSnapshot(
             itemId, newLastPrice, lastBid, SniperState.WINNING);        
     }
-    
-    public SniperSnapshot lost() {
-        return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.LOST);
-    }
-    
-    public SniperSnapshot won() {
-        return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.WON);
+
+    public SniperSnapshot closed() {
+        return new SniperSnapshot(
+            itemId, lastPrice, lastBid, state.whenAuctionClosed());
     }
     
     public static SniperSnapshot joining(String itemId) {

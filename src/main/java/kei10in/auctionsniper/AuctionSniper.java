@@ -15,11 +15,7 @@ public class AuctionSniper implements AuctionEventListener {
     }
 
     public void auctionClosed() {
-        if (isWinning) {
-            snapshot = snapshot.won();
-        } else {
-            snapshot = snapshot.lost();
-        }
+        snapshot = snapshot.closed();
         nofityChang();
     }
 
