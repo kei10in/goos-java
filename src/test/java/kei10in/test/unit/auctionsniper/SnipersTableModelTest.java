@@ -42,7 +42,7 @@ public class SnipersTableModelTest {
             oneOf(listener).tableChanged(with(aRowChangedEvent()));
         }});
         
-        cut.sniperStatusChanged(
+        cut.sniperStateChanged(
             new SniperSnapshot("item id", 555, 666, SniperState.BIDDING));
         
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");

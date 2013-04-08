@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.SwingUtilities;
 
 import kei10in.auctionsniper.ui.MainWindow;
+import kei10in.auctionsniper.ui.SnipersTableModel;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
@@ -51,7 +52,7 @@ public class Main {
     }
 
 
-
+    private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
     @SuppressWarnings("unused")
     private Chat notToBeGCd;
@@ -63,7 +64,7 @@ public class Main {
     private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                ui = new MainWindow();
+                ui = new MainWindow(snipers);
             }
         });
     }
@@ -81,7 +82,7 @@ public class Main {
             new AuctionMessageTranslator(
                 connection.getUser(),
                 new AuctionSniper(
-                    itemId, auction, new SniperStateDisplayer())));
+                    itemId, auction, new SwingThreadSniperListener(snipers))));
         auction.join();
     }
 
@@ -95,12 +96,17 @@ public class Main {
     }
     
     
-    public class SniperStateDisplayer implements SniperListener {
+    public class SwingThreadSniperListener implements SniperListener {
+        private final SniperListener listener;
+        
+        public SwingThreadSniperListener(SniperListener listener) {
+            this.listener = listener;
+        }
         
         public void sniperStateChanged(final SniperSnapshot snapshot) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    ui.sniperStatusChanged(snapshot);
+                    listener.sniperStateChanged(snapshot);
                 } 
             });
         }
