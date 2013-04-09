@@ -1,6 +1,6 @@
 package kei10in.auctionsniper;
 
-import com.objogate.exception.Defect;
+import kei10in.auctionsniper.util.Defect;
 
 public enum SniperState {
     JOINING {
