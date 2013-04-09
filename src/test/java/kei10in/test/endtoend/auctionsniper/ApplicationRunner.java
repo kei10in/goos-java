@@ -2,6 +2,7 @@ package kei10in.test.endtoend.auctionsniper;
 
 import kei10in.auctionsniper.Main;
 import kei10in.auctionsniper.SniperState;
+import kei10in.auctionsniper.ui.MainWindow;
 import kei10in.auctionsniper.ui.SnipersTableModel;
 
 public class ApplicationRunner {
@@ -31,6 +32,8 @@ public class ApplicationRunner {
         thread.setDaemon(true);
         thread.start();
         driver = new AuctionSniperDriver(1000);
+        driver.hasTitle(MainWindow.APPLICATION_TITLE);
+        driver.hasColumnTitles();
         driver.showsSniperStatus(
             SnipersTableModel.textFor(SniperState.JOINING));
     }

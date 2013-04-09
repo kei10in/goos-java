@@ -9,6 +9,7 @@ import javax.swing.JTable;
 
 public class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
+    public static final String APPLICATION_TITLE = "Auction Sniper";
     public static final String MAIN_WINDOW_NAME = "main window";
     public static final String SNIPER_STATUS_NAME = "sniper status";
     public static final String SNIPERS_TABLE_NAME = "snipers table";
@@ -16,7 +17,7 @@ public class MainWindow extends JFrame {
     private final SnipersTableModel snipers;
 
     public MainWindow(SnipersTableModel snipers) {
-        super("Auction Sniper");
+        super(APPLICATION_TITLE);
         this.snipers = snipers;
         setName(MainWindow.MAIN_WINDOW_NAME);
         fillContentPane(makeSniperTable());

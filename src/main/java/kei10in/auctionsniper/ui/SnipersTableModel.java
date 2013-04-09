@@ -21,7 +21,12 @@ public class SnipersTableModel extends AbstractTableModel
     private static final SniperSnapshot STARTING_UP =
         new SniperSnapshot("", 0, 0, SniperState.JOINING);
         
-    private SniperSnapshot snapshot = STARTING_UP;    
+    private SniperSnapshot snapshot = STARTING_UP;
+    
+    @Override
+    public String getColumnName(int column) {
+        return Column.at(column).name;
+    }
 
     public int getColumnCount() {
         return Column.values().length;
