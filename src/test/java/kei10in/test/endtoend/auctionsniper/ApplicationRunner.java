@@ -12,16 +12,12 @@ public class ApplicationRunner {
     private static final String XMPP_HOSTNAME = "localhost";
     private AuctionSniperDriver driver;
 
-    public void startBiddingIn(final FakeAuctionServer auction) {
+    public void startBiddingIn(final FakeAuctionServer ... auctions) {
         Thread thread = new Thread("Test Application") {
             @Override
             public void run() {
                 try {
-                    Main.main(
-                        XMPP_HOSTNAME,
-                        SNIPER_ID,
-                        SNIPER_PASSWORD,
-                        auction.getItemId());
+                    Main.main(arguments(auctions));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -68,5 +64,16 @@ public class ApplicationRunner {
         if (driver != null) {
             driver.dispose();
         }
+    }
+    
+    private static String[] arguments(FakeAuctionServer... auctions) {
+        String[] arguments = new String[auctions.length + 3];
+        arguments[0] = XMPP_HOSTNAME;
+        arguments[1] = SNIPER_ID;
+        arguments[2] = SNIPER_PASSWORD;
+        for (int i = 0; i < auctions.length; i++) {
+            arguments[i + 3] = auctions[i].getItemId();
+        }
+        return arguments;
     }
 }
