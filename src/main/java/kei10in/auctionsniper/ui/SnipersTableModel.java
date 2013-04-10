@@ -1,10 +1,13 @@
 package kei10in.auctionsniper.ui;
 
+import java.util.ArrayList;
+
 import javax.swing.table.AbstractTableModel;
 
 import kei10in.auctionsniper.SniperListener;
 import kei10in.auctionsniper.SniperSnapshot;
 import kei10in.auctionsniper.SniperState;
+import kei10in.auctionsniper.util.Defect;
 
 public class SnipersTableModel extends AbstractTableModel
     implements SniperListener {
@@ -18,10 +21,9 @@ public class SnipersTableModel extends AbstractTableModel
         "Lost",
         "WON",
     };
-    private static final SniperSnapshot STARTING_UP =
-        new SniperSnapshot("", 0, 0, SniperState.JOINING);
-        
-    private SniperSnapshot snapshot = STARTING_UP;
+    
+    private ArrayList<SniperSnapshot> snapshots =
+        new ArrayList<SniperSnapshot>();
     
     @Override
     public String getColumnName(int column) {
@@ -33,20 +35,36 @@ public class SnipersTableModel extends AbstractTableModel
     }
 
     public int getRowCount() {
-        return 1;
+        return snapshots.size();
     }
 
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return Column.at(columnIndex).valueIn(snapshot);
+        return Column.at(columnIndex).valueIn(snapshots.get(rowIndex));
     }
     
     public void sniperStateChanged(SniperSnapshot newSnapshot) {
-        this.snapshot = newSnapshot;
-        fireTableRowsUpdated(0, 0);
+        int row = rowMatching(newSnapshot);
+        snapshots.set(row, newSnapshot);
+        fireTableRowsUpdated(row, row);
+    }
+    
+    private int rowMatching(SniperSnapshot snapshot) {
+        for (int i = 0; i < snapshots.size(); i++) {
+            if (snapshot.isForSameItemAs(snapshots.get(i))) {
+                snapshots.set(i, snapshot);
+                return i;
+            }
+        }
+        throw new Defect("Cannot find match for " + snapshot); 
     }
     
     public static String textFor(SniperState state) {
         return STATUS_TEXT[state.ordinal()];
+    }
+
+    public void addSniper(SniperSnapshot snapshot) {
+        snapshots.add(snapshot);
+        fireTableRowsInserted(snapshots.size() - 1, snapshots.size() - 1);
     }
 
 }
