@@ -1,6 +1,7 @@
 package kei10in.test.endtoend.auctionsniper;
 
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -88,6 +89,11 @@ public class AuctionSniperEndToEndTest {
         
         application.showsSniperHasWonAution(auction, 1098);
         application.showsSniperHasWonAution(auction2, 521);
+    }
+    
+    @BeforeClass
+    public static void setupKeyboardLayout() {
+        System.setProperty("com.objogate.wl.keyboard", "US");
     }
 
     @After
