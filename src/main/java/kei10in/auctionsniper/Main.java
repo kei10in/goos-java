@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 
 import kei10in.auctionsniper.ui.MainWindow;
 import kei10in.auctionsniper.ui.SnipersTableModel;
+import kei10in.auctionsniper.ui.SwingThreadSniperListener;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
@@ -94,22 +95,4 @@ public class Main {
             }
         });
     }
-    
-    public class SwingThreadSniperListener implements SniperListener {
-        private final SniperListener listener;
-        
-        public SwingThreadSniperListener(SniperListener listener) {
-            this.listener = listener;
-        }
-        
-        public void sniperStateChanged(final SniperSnapshot snapshot) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    listener.sniperStateChanged(snapshot);
-                } 
-            });
-        }
-    
-    }
-
 }
