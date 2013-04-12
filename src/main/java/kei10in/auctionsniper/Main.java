@@ -33,9 +33,7 @@ public class Main {
             args[ARG_USERNAME],
             args[ARG_PASSWORD]);
         main.disconnectWhenUICloses(connection);
-        for (int i = 3; i < args.length; i++) {
-            main.joinAuction(connection, args[i]);
-        }
+        main.addUserRequestListenerFor(connection);
     }
 
     private static XMPPConnection connection(
@@ -69,21 +67,23 @@ public class Main {
             }
         });
     }
+    
+    private void addUserRequestListenerFor(final XMPPConnection connection) {
+        ui.addUserRequestListener(new UserRequestListener() {
+            public void joinAuction(String itemId) {
+                snipers.addSniper(SniperSnapshot.joining(itemId));
+                final Chat chat = connection.getChatManager().createChat(
+                    auctionId(itemId, connection), null);
+                notToBeGCd.add(chat);
 
-    private void joinAuction(XMPPConnection connection, String itemId)
-        throws Exception {
-        safelyAddItemToModel(itemId);
-        final Chat chat = connection.getChatManager().createChat(
-            auctionId(itemId, connection), null);
-        notToBeGCd.add(chat);
-
-        Auction auction = new XMPPAuction(chat);
-        chat.addMessageListener(
-            new AuctionMessageTranslator(
-                connection.getUser(),
-                new AuctionSniper(
-                    itemId, auction, new SwingThreadSniperListener(snipers))));
-        auction.join();
+                Auction auction = new XMPPAuction(chat);
+                chat.addMessageListener(
+                    new AuctionMessageTranslator(connection.getUser(),
+                        new AuctionSniper(itemId, auction,
+                            new SwingThreadSniperListener(snipers))));
+                auction.join();
+            }
+        });
     }
 
     private void disconnectWhenUICloses(final XMPPConnection connection) {
@@ -94,15 +94,6 @@ public class Main {
             }
         });
     }
-    
-    private void safelyAddItemToModel(final String itemId) throws Exception { 
-        SwingUtilities.invokeAndWait(new Runnable() {
-            public void run() {
-                snipers.addSniper(SniperSnapshot.joining(itemId));
-            }
-        });
-    }
-    
     
     public class SwingThreadSniperListener implements SniperListener {
         private final SniperListener listener;
