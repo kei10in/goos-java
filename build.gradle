@@ -33,6 +33,13 @@ test {
     }
 }
 
+task integration(type: Test) {
+    include 'kei10in/test/integration/**'
+    testLogging {
+        exceptionFormat "full"
+    }
+}
+
 task endtoend(type: Test) {
     include 'kei10in/test/endtoend/**'
     testLogging {

@@ -3,6 +3,8 @@ package kei10in.auctionsniper.ui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -10,6 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
+import kei10in.auctionsniper.UserRequestListener;
+import kei10in.auctionsniper.util.Announcer;
 
 public class MainWindow extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -21,6 +26,8 @@ public class MainWindow extends JFrame {
     public static final String JOIN_BUTTON_NAME = "join";
     
     private final SnipersTableModel snipers;
+    private final Announcer<UserRequestListener> userRequests =
+        new Announcer<UserRequestListener>(UserRequestListener.class);
 
     public MainWindow(SnipersTableModel snipers) {
         super(APPLICATION_TITLE);
@@ -30,6 +37,10 @@ public class MainWindow extends JFrame {
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+    
+    public void addUserRequestListener(UserRequestListener listener) {
+        userRequests.addListener(listener);
     }
     
 
@@ -56,6 +67,11 @@ public class MainWindow extends JFrame {
         
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);
+        joinAuctionButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+            userRequests.announce().joinAuction(itemIdField.getText());
+           } 
+        });
         controls.add(joinAuctionButton);
         
         return controls;
