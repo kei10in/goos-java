@@ -9,11 +9,7 @@ import javax.swing.SwingUtilities;
 import kei10in.auctionsniper.ui.MainWindow;
 import kei10in.auctionsniper.ui.SnipersTableModel;
 import kei10in.auctionsniper.ui.SwingThreadSniperListener;
-import kei10in.auctionsniper.xmpp.XMPPAuction;
 import kei10in.auctionsniper.xmpp.XMPPAuctionHouse;
-
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
 
 public class Main {
     private static final int ARG_HOSTNAME = 0;

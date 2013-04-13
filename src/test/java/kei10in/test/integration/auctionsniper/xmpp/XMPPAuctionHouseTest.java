@@ -7,18 +7,17 @@ import java.util.concurrent.CountDownLatch;
 
 import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionEventListener;
-import kei10in.auctionsniper.xmpp.XMPPAuction;
+import kei10in.auctionsniper.xmpp.XMPPAuctionHouse;
 import kei10in.test.endtoend.auctionsniper.ApplicationRunner;
 import kei10in.test.endtoend.auctionsniper.FakeAuctionServer;
 
-import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class XMPPAuctionHouseTest {
-    private XMPPConnection connection;
+    private XMPPAuctionHouse auctionHouse;
     private FakeAuctionServer server = new FakeAuctionServer("item-54321");
 
     @Test
@@ -26,7 +25,7 @@ public class XMPPAuctionHouseTest {
         throws Exception {
         CountDownLatch auctionWasClosed = new CountDownLatch(1);
 
-        Auction auction = new XMPPAuction(connection, server.getItemId());
+        Auction auction = auctionHouse.auctionFor(server.getItemId());
         auction.addAuctionEventListener(
             auctionClosedListener(auctionWasClosed));
         
@@ -53,18 +52,16 @@ public class XMPPAuctionHouseTest {
     }
     
     @Before
-    public void connect() throws XMPPException {
-        connection = new XMPPConnection(FakeAuctionServer.XMPP_HOSTNAME);
-        connection.connect();
-        connection.login(
+    public void openAuctionHouse() throws XMPPException {
+        auctionHouse = new XMPPAuctionHouse(
+            FakeAuctionServer.XMPP_HOSTNAME,
             ApplicationRunner.SNIPER_ID,
-            ApplicationRunner.SNIPER_PASSWORD,
-            XMPPAuction.AUCTION_RESOURCE);
+            ApplicationRunner.SNIPER_PASSWORD);
     }
 
     @After
-    public void disconnect() {
-        connection.disconnect();
+    public void closeAuctionHouse() {
+        auctionHouse.disconnect();
     }
     
     @Before
