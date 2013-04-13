@@ -2,13 +2,11 @@ package kei10in.auctionsniper;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
 import kei10in.auctionsniper.ui.MainWindow;
 import kei10in.auctionsniper.ui.SnipersTableModel;
-import kei10in.auctionsniper.ui.SwingThreadSniperListener;
 import kei10in.auctionsniper.xmpp.XMPPAuctionHouse;
 
 public class Main {
@@ -31,7 +29,6 @@ public class Main {
 
     private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
-    private ArrayList<Auction> notToBeGCd = new ArrayList<Auction>();
 
     public Main() throws Exception {
         startUserInterface();
@@ -46,18 +43,7 @@ public class Main {
     }
     
     private void addUserRequestListenerFor(final AuctionHouse auctionHouse) {
-        ui.addUserRequestListener(new UserRequestListener() {
-            public void joinAuction(String itemId) {
-                snipers.addSniper(SniperSnapshot.joining(itemId));
-
-                Auction auction = auctionHouse.auctionFor(itemId);
-                notToBeGCd.add(auction);
-                auction.addAuctionEventListener(
-                    new AuctionSniper(itemId, auction,
-                        new SwingThreadSniperListener(snipers)));
-                auction.join();
-            }
-        });
+        ui.addUserRequestListener(new SniperLauncher(auctionHouse, snipers));
     }
 
     private void disconnectWhenUICloses(final XMPPAuctionHouse auctionHouse) {
