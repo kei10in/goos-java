@@ -10,6 +10,8 @@ import static org.junit.Assert.assertThat;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import kei10in.auctionsniper.Auction;
+import kei10in.auctionsniper.AuctionSniper;
 import kei10in.auctionsniper.SniperSnapshot;
 import kei10in.auctionsniper.SniperState;
 import kei10in.auctionsniper.ui.Column;
@@ -27,6 +29,7 @@ public class SnipersTableModelTest {
     @Rule
     public final JUnitRuleMockery context = new JUnitRuleMockery();
     private TableModelListener listener = context.mock(TableModelListener.class);
+    private Auction auction = context.mock(Auction.class);
     private SnipersTableModel cut = new SnipersTableModel();
     
     @Before
@@ -49,14 +52,14 @@ public class SnipersTableModelTest {
     
     @Test
     public void setsSniperValuesInColumns() {
-        SniperSnapshot joining = SniperSnapshot.joining("item id");
-        SniperSnapshot bidding = joining.bidding(555, 666);
+        AuctionSniper sniper = new AuctionSniper("item id", auction);
+        SniperSnapshot bidding = sniper.getSnapshot().bidding(555, 666);
         context.checking(new Expectations() {{
             allowing(listener).tableChanged(with(anyInsertionEvent()));
             oneOf(listener).tableChanged(with(aChangeInRow(0)));
         }});
         
-        cut.addSniperSnapshot(joining);
+        cut.addSniper(sniper);
         cut.sniperStateChanged(
             new SniperSnapshot("item id", 555, 666, SniperState.BIDDING));
         
@@ -65,7 +68,8 @@ public class SnipersTableModelTest {
     
     @Test
     public void notifiesListenersWhenAddingASniper() {
-        SniperSnapshot joining = SniperSnapshot.joining("item123");
+        AuctionSniper sniper = new AuctionSniper("item 123", auction);
+        SniperSnapshot joining = SniperSnapshot.joining("item 123");
         context.checking(new Expectations() {
             {
                 oneOf(listener).tableChanged(with(anInsertionAtRow(0)));
@@ -73,7 +77,7 @@ public class SnipersTableModelTest {
         });
         
         assertThat(cut.getRowCount(), equalTo(0));
-        cut.addSniperSnapshot(joining);
+        cut.addSniper(sniper);
         
         assertThat(cut.getRowCount(), equalTo(1));
         assertRowMatchesSnapshot(0, joining);
@@ -87,9 +91,9 @@ public class SnipersTableModelTest {
             }
         });
         
-        cut.addSniperSnapshot(SniperSnapshot.joining("item 0"));
-        cut.addSniperSnapshot(SniperSnapshot.joining("item 1"));
-        
+        cut.addSniper(new AuctionSniper("item 0", auction));
+        cut.addSniper(new AuctionSniper("item 1", auction));
+                
         assertThat(
             cellValue(0, Column.ITEM_IDENTIFIER),
             hasToString(equalTo("item 0")));
@@ -106,14 +110,14 @@ public class SnipersTableModelTest {
             oneOf(listener).tableChanged(with(aChangeInRow(1)));
           }});
           
-          cut.addSniperSnapshot(SniperSnapshot.joining("item 0"));
-          SniperSnapshot joining1 = SniperSnapshot.joining("item 1");
-          cut.addSniperSnapshot(joining1);
-
-          SniperSnapshot winning1 = joining1.winning(123);
-          cut.sniperStateChanged(winning1);
-          
-          assertRowMatchesSnapshot(1, winning1);
+        cut.addSniper(new AuctionSniper("item 0", auction));
+        AuctionSniper sniper1 = new AuctionSniper("item 1", auction);
+        cut.addSniper(sniper1);
+        
+        SniperSnapshot winning1 = sniper1.getSnapshot().winning(123);
+        cut.sniperStateChanged(winning1);
+        
+        assertRowMatchesSnapshot(1, winning1);
     }
     
     @Test(expected=Defect.class)

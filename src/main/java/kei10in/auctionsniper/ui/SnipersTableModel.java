@@ -72,7 +72,7 @@ public class SnipersTableModel extends AbstractTableModel
         sniper.addSniperListener(new SwingThreadSniperListener(this));
     }
 
-    public void addSniperSnapshot(SniperSnapshot snapshot) {
+    private void addSniperSnapshot(SniperSnapshot snapshot) {
         snapshots.add(snapshot);
         fireTableRowsInserted(snapshots.size() - 1, snapshots.size() - 1);
     }
