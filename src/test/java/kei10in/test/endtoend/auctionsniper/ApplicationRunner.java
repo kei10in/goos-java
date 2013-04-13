@@ -7,8 +7,8 @@ import kei10in.auctionsniper.ui.SnipersTableModel;
 
 public class ApplicationRunner {
     public static final String SNIPER_XMPP_ID = "sniper@localhost/Auction";
-    private static final String SNIPER_ID = "sniper";
-    private static final String SNIPER_PASSWORD = "sniper";
+    public static final String SNIPER_ID = "sniper";
+    public static final String SNIPER_PASSWORD = "sniper";
     private static final String XMPP_HOSTNAME = "localhost";
     private AuctionSniperDriver driver;
 
