@@ -7,7 +7,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
-import kei10in.auctionsniper.XMPPAuction;
+import kei10in.auctionsniper.xmpp.XMPPAuction;
 
 import org.hamcrest.Matcher;
 import org.jivesoftware.smack.Chat;

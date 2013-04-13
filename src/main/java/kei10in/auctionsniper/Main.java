@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 import kei10in.auctionsniper.ui.MainWindow;
 import kei10in.auctionsniper.ui.SnipersTableModel;
 import kei10in.auctionsniper.ui.SwingThreadSniperListener;
+import kei10in.auctionsniper.xmpp.XMPPAuction;
 
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;

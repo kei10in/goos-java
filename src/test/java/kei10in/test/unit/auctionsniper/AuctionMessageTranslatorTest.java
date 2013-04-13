@@ -2,7 +2,7 @@ package kei10in.test.unit.auctionsniper;
 
 import kei10in.auctionsniper.AuctionEventListener;
 import kei10in.auctionsniper.AuctionEventListener.PriceSource;
-import kei10in.auctionsniper.AuctionMessageTranslator;
+import kei10in.auctionsniper.xmpp.AuctionMessageTranslator;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;

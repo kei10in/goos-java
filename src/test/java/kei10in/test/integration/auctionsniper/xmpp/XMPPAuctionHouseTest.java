@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
 
 import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionEventListener;
-import kei10in.auctionsniper.XMPPAuction;
+import kei10in.auctionsniper.xmpp.XMPPAuction;
 import kei10in.test.endtoend.auctionsniper.ApplicationRunner;
 import kei10in.test.endtoend.auctionsniper.FakeAuctionServer;
 

@@ -1,7 +1,8 @@
-package kei10in.auctionsniper;
+package kei10in.auctionsniper.xmpp;
 
 import java.util.HashMap;
 
+import kei10in.auctionsniper.AuctionEventListener;
 import kei10in.auctionsniper.AuctionEventListener.PriceSource;
 
 import org.jivesoftware.smack.Chat;

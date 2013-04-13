@@ -1,5 +1,7 @@
-package kei10in.auctionsniper;
+package kei10in.auctionsniper.xmpp;
 
+import kei10in.auctionsniper.Auction;
+import kei10in.auctionsniper.AuctionEventListener;
 import kei10in.auctionsniper.util.Announcer;
 
 import org.jivesoftware.smack.Chat;
