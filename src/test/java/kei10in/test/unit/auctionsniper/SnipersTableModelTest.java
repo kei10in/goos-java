@@ -56,7 +56,7 @@ public class SnipersTableModelTest {
             oneOf(listener).tableChanged(with(aChangeInRow(0)));
         }});
         
-        cut.addSniper(joining);
+        cut.addSniperSnapshot(joining);
         cut.sniperStateChanged(
             new SniperSnapshot("item id", 555, 666, SniperState.BIDDING));
         
@@ -73,7 +73,7 @@ public class SnipersTableModelTest {
         });
         
         assertThat(cut.getRowCount(), equalTo(0));
-        cut.addSniper(joining);
+        cut.addSniperSnapshot(joining);
         
         assertThat(cut.getRowCount(), equalTo(1));
         assertRowMatchesSnapshot(0, joining);
@@ -87,8 +87,8 @@ public class SnipersTableModelTest {
             }
         });
         
-        cut.addSniper(SniperSnapshot.joining("item 0"));
-        cut.addSniper(SniperSnapshot.joining("item 1"));
+        cut.addSniperSnapshot(SniperSnapshot.joining("item 0"));
+        cut.addSniperSnapshot(SniperSnapshot.joining("item 1"));
         
         assertThat(
             cellValue(0, Column.ITEM_IDENTIFIER),
@@ -106,9 +106,9 @@ public class SnipersTableModelTest {
             oneOf(listener).tableChanged(with(aChangeInRow(1)));
           }});
           
-          cut.addSniper(SniperSnapshot.joining("item 0"));
+          cut.addSniperSnapshot(SniperSnapshot.joining("item 0"));
           SniperSnapshot joining1 = SniperSnapshot.joining("item 1");
-          cut.addSniper(joining1);
+          cut.addSniperSnapshot(joining1);
 
           SniperSnapshot winning1 = joining1.winning(123);
           cut.sniperStateChanged(winning1);

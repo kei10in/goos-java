@@ -1,30 +1,22 @@
 package kei10in.auctionsniper;
 
-import java.util.ArrayList;
-
-import kei10in.auctionsniper.ui.SnipersTableModel;
-import kei10in.auctionsniper.ui.SwingThreadSniperListener;
 
 public class SniperLauncher implements UserRequestListener {
     private final AuctionHouse auctionHouse;
-    private final SnipersTableModel snipers;
-    private ArrayList<Auction> notToBeGCd = new ArrayList<Auction>();
+    private final SniperCollector collector;
     
     public SniperLauncher(
         AuctionHouse auctionHouse,
-        SnipersTableModel snipers) {
+        SniperCollector collector) {
         this.auctionHouse = auctionHouse;
-        this.snipers = snipers;
+        this.collector = collector;
     }
     
     public void joinAuction(String itemId) {
-        snipers.addSniper(SniperSnapshot.joining(itemId));
-
         Auction auction = auctionHouse.auctionFor(itemId);
-        notToBeGCd.add(auction);
-        AuctionSniper sniper = new AuctionSniper(
-            itemId, auction, new SwingThreadSniperListener(snipers)); 
+        AuctionSniper sniper = new AuctionSniper(itemId, auction);
         auction.addAuctionEventListener(sniper);
+        collector.addSniper(sniper);
         auction.join();
     }
 }

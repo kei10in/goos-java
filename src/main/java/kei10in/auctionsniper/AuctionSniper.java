@@ -1,8 +1,11 @@
 package kei10in.auctionsniper;
 
+import kei10in.auctionsniper.util.Announcer;
+
 public class AuctionSniper implements AuctionEventListener {
-    private final Auction auction; 
-    private final SniperListener sniperListener;
+    private final Auction auction;
+    private final Announcer<SniperListener> sniperListeners =
+        Announcer.to(SniperListener.class);
     private SniperSnapshot snapshot;
     
     private boolean isWinning = false; 
@@ -10,10 +13,15 @@ public class AuctionSniper implements AuctionEventListener {
     public AuctionSniper(
         String itemId, Auction auction, SniperListener listener) {
         this.auction = auction;
-        this.sniperListener = listener;
+        this.sniperListeners.addListener(listener);
         this.snapshot = SniperSnapshot.joining(itemId);
     }
 
+    public AuctionSniper(String itemId, Auction auction) {
+        this.auction = auction;
+        this.snapshot = SniperSnapshot.joining(itemId);
+    }
+    
     public void auctionClosed() {
         snapshot = snapshot.closed();
         nofityChang();
@@ -31,8 +39,16 @@ public class AuctionSniper implements AuctionEventListener {
         }
         nofityChang();
     }
+    
+    public SniperSnapshot getSnapshot() {
+        return snapshot;
+    }
+    
+    public void addSniperListener(SniperListener listener) {
+        sniperListeners.addListener(listener);
+    }
 
     private void nofityChang() {
-        sniperListener.sniperStateChanged(snapshot);
+        sniperListeners.announce().sniperStateChanged(snapshot);
     }
 }

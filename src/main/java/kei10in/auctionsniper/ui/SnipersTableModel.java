@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+import kei10in.auctionsniper.AuctionSniper;
+import kei10in.auctionsniper.SniperCollector;
 import kei10in.auctionsniper.SniperListener;
 import kei10in.auctionsniper.SniperSnapshot;
 import kei10in.auctionsniper.SniperState;
 import kei10in.auctionsniper.util.Defect;
 
 public class SnipersTableModel extends AbstractTableModel
-    implements SniperListener {
+    implements SniperListener, SniperCollector {
     private static final long serialVersionUID = 1L;
     
     
@@ -24,6 +26,8 @@ public class SnipersTableModel extends AbstractTableModel
     
     private ArrayList<SniperSnapshot> snapshots =
         new ArrayList<SniperSnapshot>();
+    private ArrayList<AuctionSniper> notToBeGCd =
+        new ArrayList<AuctionSniper>();
     
     @Override
     public String getColumnName(int column) {
@@ -62,7 +66,13 @@ public class SnipersTableModel extends AbstractTableModel
         return STATUS_TEXT[state.ordinal()];
     }
 
-    public void addSniper(SniperSnapshot snapshot) {
+    public void addSniper(AuctionSniper sniper) {
+        notToBeGCd.add(sniper);
+        addSniperSnapshot(sniper.getSnapshot());
+        sniper.addSniperListener(new SwingThreadSniperListener(this));
+    }
+
+    public void addSniperSnapshot(SniperSnapshot snapshot) {
         snapshots.add(snapshot);
         fireTableRowsInserted(snapshots.size() - 1, snapshots.size() - 1);
     }
