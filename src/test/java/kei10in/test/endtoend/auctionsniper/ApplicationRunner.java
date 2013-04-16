@@ -68,8 +68,12 @@ public class ApplicationRunner {
             }
         };
         thread.setDaemon(true);
-        thread.start();
+
+        // in order to avoid deadlock between SwingUtilities.invokeAndWait and
+        // GesturePerformer
         driver = new AuctionSniperDriver(1000);
+        thread.start();
+        
         driver.hasTitle(MainWindow.APPLICATION_TITLE);
         driver.hasColumnTitles();
     }
