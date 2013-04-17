@@ -1,6 +1,7 @@
 package kei10in.test.integration.auctionsniper.ui;
 
 import static org.hamcrest.Matchers.equalTo;
+import kei10in.auctionsniper.Item;
 import kei10in.auctionsniper.SniperPortfolio;
 import kei10in.auctionsniper.UserRequestListener;
 import kei10in.auctionsniper.ui.MainWindow;
@@ -18,19 +19,19 @@ public class MainWindowTest {
 
     @Test
     public void makesUserRequestWhenJoinButtonClicked() {
-        final ValueMatcherProbe<String> buttonProbe =
-            new ValueMatcherProbe<String>(
-                equalTo("an item-id"), "join request");
+        final ValueMatcherProbe<Item> itemProbe =
+            new ValueMatcherProbe<Item>(
+                equalTo(new Item("an item-id", 789)), "join request");
         
         mainWindow.addUserRequestListener(
             new UserRequestListener() {
-                public void joinAuction(String itemId) {
-                    buttonProbe.setReceivedValue(itemId);
+                public void joinAuction(Item item) {
+                    itemProbe.setReceivedValue(item);
                 }
             });
         
-        driver.startBiddingWithStopPrice("an item-id", Integer.MAX_VALUE);
-        driver.check(buttonProbe);
+        driver.startBiddingWithStopPrice("an item-id", 789);
+        driver.check(itemProbe);
     }
     
     @BeforeClass

@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionHouse;
 import kei10in.auctionsniper.AuctionSniper;
+import kei10in.auctionsniper.Item;
 import kei10in.auctionsniper.SniperCollector;
 import kei10in.auctionsniper.SniperLauncher;
 
@@ -49,7 +50,7 @@ public class SniperLauncherTest {
             }
         });
         
-        cut.joinAuction(itemId);
+        cut.joinAuction(new Item(itemId, Integer.MAX_VALUE));
     }
     
     private Matcher<AuctionSniper> sniperForItem(String itemId) {

@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import kei10in.auctionsniper.Item;
 import kei10in.auctionsniper.SniperPortfolio;
 import kei10in.auctionsniper.UserRequestListener;
 import kei10in.auctionsniper.util.Announcer;
@@ -76,9 +77,18 @@ public class MainWindow extends JFrame {
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);
         joinAuctionButton.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e) {
-            userRequests.announce().joinAuction(itemIdField.getText());
-           } 
+            public void actionPerformed(ActionEvent e) {
+                userRequests.announce().joinAuction(
+                    new Item(itemId(), stopPrice()));
+            }
+            
+            private String itemId() {
+                return itemIdField.getText();
+            }
+            
+            private int stopPrice() {
+                return ((Number)stopPriceField.getValue()).intValue();
+            }
         });
         controls.add(joinAuctionButton);
         
