@@ -77,18 +77,18 @@ public class MainWindow extends JFrame {
         JButton joinAuctionButton = new JButton("Join Auction");
         joinAuctionButton.setName(JOIN_BUTTON_NAME);
         joinAuctionButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                userRequests.announce().joinAuction(
-                    new Item(itemId(), stopPrice()));
-            }
-            
-            private String itemId() {
-                return itemIdField.getText();
-            }
-            
-            private int stopPrice() {
-                return ((Number)stopPriceField.getValue()).intValue();
-            }
+           public void actionPerformed(ActionEvent e) {
+            userRequests.announce().joinAuction(
+                new Item(itemId(), stopPrice()));
+           } 
+           
+           private String itemId() {
+               return itemIdField.getText();
+           }
+           
+           private int stopPrice() {
+               return ((Number)stopPriceField.getValue()).intValue();
+           }
         });
         controls.add(joinAuctionButton);
         
