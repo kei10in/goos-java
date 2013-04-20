@@ -48,6 +48,9 @@ public class XMPPAuctionHouseTest {
                 int price, int increment, PriceSource priceSource) {
                 // not implement
             }
+            public void auctionFailed() {
+                // not implement
+            }
         };
     }
     

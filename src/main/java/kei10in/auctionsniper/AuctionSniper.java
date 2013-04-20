@@ -39,6 +39,10 @@ public class AuctionSniper implements AuctionEventListener {
         nofityChang();
     }
     
+    public void auctionFailed() {
+        // TODO Implement
+    }
+    
     public SniperSnapshot getSnapshot() {
         return snapshot;
     }
