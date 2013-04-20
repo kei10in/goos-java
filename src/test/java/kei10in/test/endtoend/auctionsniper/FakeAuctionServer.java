@@ -54,7 +54,7 @@ public class FakeAuctionServer {
         return itemId;
     }
 
-    public void hasRecievedJoinRequestFromSniper(String sniperId)
+    public void hasReceivedJoinRequestFromSniper(String sniperId)
         throws InterruptedException {
         recievesAMessageMatching(
             sniperId, equalTo(XMPPAuction.JOIN_COMMAND_FORMAT));

@@ -19,7 +19,7 @@ public class AuctionSniper implements AuctionEventListener {
     
     public void auctionClosed() {
         snapshot = snapshot.closed();
-        nofityChang();
+        notifyChanged();
     }
 
     public void currentPrice(
@@ -36,12 +36,12 @@ public class AuctionSniper implements AuctionEventListener {
                 snapshot = snapshot.losing(price);
             }
         }
-        nofityChang();
+        notifyChanged();
     }
     
     public void auctionFailed() {
         snapshot = snapshot.failed();
-        nofityChang();
+        notifyChanged();
     }
     
     public SniperSnapshot getSnapshot() {
@@ -52,7 +52,7 @@ public class AuctionSniper implements AuctionEventListener {
         sniperListeners.addListener(listener);
     }
 
-    private void nofityChang() {
+    private void notifyChanged() {
         sniperListeners.announce().sniperStateChanged(snapshot);
     }
 }

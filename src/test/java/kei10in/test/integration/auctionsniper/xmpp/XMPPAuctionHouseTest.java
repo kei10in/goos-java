@@ -30,7 +30,7 @@ public class XMPPAuctionHouseTest {
             auctionClosedListener(auctionWasClosed));
         
         auction.join();
-        server.hasRecievedJoinRequestFromSniper(
+        server.hasReceivedJoinRequestFromSniper(
             ApplicationRunner.SNIPER_XMPP_ID);
         server.announceClosed();
         
