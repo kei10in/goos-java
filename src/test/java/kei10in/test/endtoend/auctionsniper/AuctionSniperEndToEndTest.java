@@ -112,6 +112,39 @@ public class AuctionSniperEndToEndTest {
         application.showsSniperHasLostAution(auction, 1207, 1098);
     }
     
+    @Test
+    public void sniperReportsInvalidAuctionMessageAndStopsRespondingToEvents()
+        throws Exception {
+        String brokenMessage = "a broken message";
+        auction.startSellingItem();
+        auction2.startSellingItem();
+        
+        application.startBiddingIn(auction, auction2);
+        auction.hasRecievedJoinRequestFromSniper(
+            ApplicationRunner.SNIPER_XMPP_ID);
+        
+        auction.reportPrice(500, 20, "other bidder");
+        auction.hasRecievedBid(520, ApplicationRunner.SNIPER_XMPP_ID);
+        
+        auction.sendInvalidMessageContaining(brokenMessage);
+        application.showsSniperHasFailed(auction);
+        
+        auction.reportPrice(520, 21, "other bidder");
+        waitForAnotherAuctionEvent();
+        
+        application.reportsInvalidMessage(auction, brokenMessage);
+        application.showsSniperHasFailed(auction);
+        
+    }
+    
+    private void waitForAnotherAuctionEvent() throws Exception {
+        auction2.hasRecievedJoinRequestFromSniper(
+            ApplicationRunner.SNIPER_XMPP_ID);
+        auction2.reportPrice(600, 6, "other bidder");
+        application.hasShownSniperIsBidding(auction2, 600, 606);
+        
+    }
+
     @BeforeClass
     public static void setupKeyboardLayout() {
         System.setProperty("com.objogate.wl.keyboard", "US");

@@ -22,6 +22,7 @@ public class SnipersTableModel extends AbstractTableModel
         "Losing",
         "Lost",
         "WON",
+        "Failed"
     };
     
     private ArrayList<SniperSnapshot> snapshots =

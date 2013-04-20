@@ -65,6 +65,17 @@ public class ApplicationRunner {
             auction.getItemId(), lastPrice, lastPrice,
             SnipersTableModel.textFor(SniperState.WON));
     }
+    
+    public void showsSniperHasFailed(FakeAuctionServer auction) {
+        driver.showsSniperStatus(
+            auction.getItemId(), 0, 0,
+            SnipersTableModel.textFor(SniperState.FAILED));
+    }
+
+    public void reportsInvalidMessage(FakeAuctionServer auction,
+        String brokenMessage) {
+        // TODO Auto-generated method stub
+    }
 
     public void stop() {
         if (driver != null) {
@@ -93,4 +104,5 @@ public class ApplicationRunner {
         driver.hasTitle(MainWindow.APPLICATION_TITLE);
         driver.hasColumnTitles();
     }
+
 }

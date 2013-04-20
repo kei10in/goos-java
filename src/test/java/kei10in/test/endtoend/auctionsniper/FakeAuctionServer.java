@@ -81,6 +81,10 @@ public class FakeAuctionServer {
         assertThat(currentChat.getParticipant(), equalTo(sniperId));
     }
 
+    public void sendInvalidMessageContaining(String brokenMessage) 
+        throws XMPPException {
+        currentChat.sendMessage(brokenMessage);
+    }
 
     public void announceClosed() throws XMPPException {
         currentChat.sendMessage("SOLVersion: 1.1; Event: CLOSE;");
@@ -104,4 +108,5 @@ public class FakeAuctionServer {
             assertThat(message, hasProperty("body", messageMatcher));
         }
     }
+
 }
