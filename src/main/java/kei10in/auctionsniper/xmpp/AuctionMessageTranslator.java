@@ -12,6 +12,7 @@ import org.jivesoftware.smack.packet.Message;
 public class AuctionMessageTranslator implements MessageListener {
     private final String sniperId;
     private AuctionEventListener listener;
+    private XMPPFailureReporter failureReporter;
 
     public AuctionMessageTranslator(
         String sniperId, AuctionEventListener listener) {
@@ -19,10 +20,20 @@ public class AuctionMessageTranslator implements MessageListener {
         this.listener = listener; 
     }
 
+    public AuctionMessageTranslator(
+        String sniperId, AuctionEventListener listener,
+        XMPPFailureReporter failureReporter) {
+        this.sniperId = sniperId;
+        this.listener = listener;
+        this.failureReporter = failureReporter;
+    }
+
     public void processMessage(Chat chat, Message message) {
         try {
             translate(message.getBody());
-        } catch (Exception parseException) {
+        } catch (Exception exception) {
+            failureReporter.cannotTranslateMessage(
+                sniperId, message.getBody(), exception);
             listener.auctionFailed();
         }
     }

@@ -3,6 +3,7 @@ package kei10in.test.unit.auctionsniper;
 import kei10in.auctionsniper.AuctionEventListener;
 import kei10in.auctionsniper.AuctionEventListener.PriceSource;
 import kei10in.auctionsniper.xmpp.AuctionMessageTranslator;
+import kei10in.auctionsniper.xmpp.XMPPFailureReporter;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.packet.Message;
@@ -18,8 +19,10 @@ public class AuctionMessageTranslatorTest {
     private final String SNIPER_ID = "sniper";
     private final AuctionEventListener listener =
         context.mock(AuctionEventListener.class);
+    private final XMPPFailureReporter failureReporter = 
+        context.mock(XMPPFailureReporter.class);
     private final AuctionMessageTranslator cut =
-        new AuctionMessageTranslator(SNIPER_ID, listener);
+        new AuctionMessageTranslator(SNIPER_ID, listener, failureReporter);
 
     @Test
     public void notifiesAuctionClosedWhenCloseMessageReceived() {
@@ -27,12 +30,10 @@ public class AuctionMessageTranslatorTest {
             oneOf(listener).auctionClosed();
         }});
         
-        Message message = new Message();
-        message.setBody("SOLVersion: 1.1; Event: CLOSE;");
-        
-        cut.processMessage(UNUSED_CHAT, message);
+        String body = "SOLVersion: 1.1; Event: CLOSE;";
+        cut.processMessage(UNUSED_CHAT, message(body));
     }
-    
+
     @Test public void
     notifiesBidDetailsWhenCurrentPriceMessageReceivedFromOtherBidder() {
         context.checking(new Expectations() {{
@@ -40,12 +41,11 @@ public class AuctionMessageTranslatorTest {
                 192, 7, PriceSource.FromOtherBidder);
         }});
         
-        Message message = new Message();
-        message.setBody(
+        String body =
             "SOLVersion: 1.1; Event: PRICE; CurrentPrice: 192; Increment: 7; "
-            + "Bidder: Someone else;");
-        
-        cut.processMessage(UNUSED_CHAT, message);
+            + "Bidder: Someone else;";
+
+        cut.processMessage(UNUSED_CHAT, message(body));
     }
 
     @Test public void
@@ -55,41 +55,44 @@ public class AuctionMessageTranslatorTest {
                 234, 5, PriceSource.FromSniper);
         }});
         
-        Message message = new Message();
-        message.setBody(
+        String body =
             "SOLVersion: 1.1; Event: PRICE; CurrentPrice: 234; Increment: 5; "
-            + "Bidder: " + SNIPER_ID + ";");
+            + "Bidder: " + SNIPER_ID + ";"; 
         
-        cut.processMessage(UNUSED_CHAT, message);
+        cut.processMessage(UNUSED_CHAT, message(body));
     }
     
     @Test public void
     notifiesAuctionFailedWhenEventTypeMissing() {
-        context.checking(new Expectations() {
-            {
-                exactly(1).of(listener).auctionFailed();
-            }
-        });
-        
-        Message message = new Message();
-        message.setBody("SOLVersion: 1.1; CurrentPrice: 234; Increment: 5;" +
-        		"Biddor: " + SNIPER_ID + ";");
-        
-        cut.processMessage(UNUSED_CHAT, message);
+        String badMessage =
+            "SOLVersion: 1.1; CurrentPrice: 234; Increment: 5;" +
+            "Biddor: " + SNIPER_ID + ";";
+        expectFailureWithMessage(badMessage);
+        cut.processMessage(UNUSED_CHAT, message(badMessage));
     }
     
     @Test public void
     notifiesAuctionFailedWhenBadMessageReceived() {
+        final String badMessage = "a bad message";
+        expectFailureWithMessage(badMessage);
+        cut.processMessage(UNUSED_CHAT, message(badMessage));
+    }
+
+    private Message message(String body) {
+        Message message = new Message();
+        message.setBody(body);
+        return message;
+    }
+    
+    private void expectFailureWithMessage(final String badMessage) {
         context.checking(new Expectations() {
             {
                 exactly(1).of(listener).auctionFailed();
+                exactly(1).of(failureReporter).cannotTranslateMessage(
+                    with(SNIPER_ID), with(badMessage),
+                    with(any(Exception.class)));
             }
         });
-        
-        Message message = new Message();
-        message.setBody("a bad message");
-        
-        cut.processMessage(UNUSED_CHAT, message);
     }
 
 }
