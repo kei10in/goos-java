@@ -57,6 +57,10 @@ public class SniperSnapshot {
             itemId, lastPrice, lastBid, state.whenAuctionClosed());
     }
     
+    public SniperSnapshot failed() {
+        return new SniperSnapshot(itemId, 0, 0, SniperState.FAILED);
+    }
+    
     public static SniperSnapshot joining(String itemId) {
         return new SniperSnapshot(itemId, 0, 0, SniperState.JOINING);        
     }

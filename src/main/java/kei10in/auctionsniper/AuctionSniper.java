@@ -40,7 +40,8 @@ public class AuctionSniper implements AuctionEventListener {
     }
     
     public void auctionFailed() {
-        // TODO Implement
+        snapshot = snapshot.failed();
+        nofityChang();
     }
     
     public SniperSnapshot getSnapshot() {
