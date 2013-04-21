@@ -11,14 +11,8 @@ import org.jivesoftware.smack.packet.Message;
 
 public class AuctionMessageTranslator implements MessageListener {
     private final String sniperId;
-    private AuctionEventListener listener;
-    private XMPPFailureReporter failureReporter;
-
-    public AuctionMessageTranslator(
-        String sniperId, AuctionEventListener listener) {
-        this.sniperId = sniperId;
-        this.listener = listener; 
-    }
+    private final AuctionEventListener listener;
+    private final XMPPFailureReporter failureReporter;
 
     public AuctionMessageTranslator(
         String sniperId, AuctionEventListener listener,

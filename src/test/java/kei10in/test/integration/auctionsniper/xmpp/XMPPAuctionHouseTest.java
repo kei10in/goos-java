@@ -7,6 +7,7 @@ import java.util.concurrent.CountDownLatch;
 
 import kei10in.auctionsniper.Auction;
 import kei10in.auctionsniper.AuctionEventListener;
+import kei10in.auctionsniper.xmpp.XMPPAuctionException;
 import kei10in.auctionsniper.xmpp.XMPPAuctionHouse;
 import kei10in.test.endtoend.auctionsniper.ApplicationRunner;
 import kei10in.test.endtoend.auctionsniper.FakeAuctionServer;
@@ -55,7 +56,7 @@ public class XMPPAuctionHouseTest {
     }
     
     @Before
-    public void openAuctionHouse() throws XMPPException {
+    public void openAuctionHouse() throws XMPPAuctionException {
         auctionHouse = new XMPPAuctionHouse(
             FakeAuctionServer.XMPP_HOSTNAME,
             ApplicationRunner.SNIPER_ID,
